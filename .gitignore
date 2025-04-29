@@ -26,7 +26,3 @@ go.work.sum
 go-micro.iml.code-workspace
 broker-service/brokerApp
 authentication-service/authApp
-
-#folders
-/project/db-data/postgres/*
-!/project/db-data/postgres
