@@ -24,3 +24,4 @@ go.work.sum
 # env file
 .env
 go-micro.iml.code-workspace
+broker-service/brokerApp
