@@ -27,3 +27,5 @@ go-micro.iml.code-workspace
 broker-service/brokerApp
 authentication-service/authApp
 project/.vscode/settings.json
+project/db-data/postgres/*
+.idea/
