@@ -29,3 +29,4 @@ authentication-service/authApp
 project/.vscode/settings.json
 project/db-data/postgres/*
 .idea/
+go-micro.iml
