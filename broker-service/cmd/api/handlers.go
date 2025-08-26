@@ -7,83 +7,80 @@ import (
 	"net/http"
 )
 
-type RequestPayload struct{
-	Action string `json:"action"`
-	Auth AuthPayload `json:"action,omitempty"`
-	
-
+type RequestPayload struct {
+	Action string      `json:"action"`
+	Auth   AuthPayload `json:"auth,omitempty"`
 }
 
 type AuthPayload struct {
-	Email string `json:"email"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
-
-
 
 func (app *Config) Broker(w http.ResponseWriter, r *http.Request) {
 	payload := jsonResponse{
 		Error:   false,
-		Message: "Hit the broker"}
+		Message: "Hit the broker",
+	}
 	_ = app.writeJSON(w, http.StatusOK, payload)
-	
+
 }
 
-func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request){
+func (app *Config) HandleSubmission(w http.ResponseWriter, r *http.Request) {
 	var requestPayload RequestPayload
-	err := app.readJSON(w,r, &requestPayload)
-	if err !=nil{
-		app.errorJson(w,err)
+
+	err := app.readJSON(w, r, &requestPayload)
+	if err != nil {
+		app.errorJson(w, err)
 		return
 	}
 
-	switch requestPayload.Action{
-		case "auth":
-			app.authenticate(w, requestPayload.Auth)			
-		default: 
-			app.errorJson(w, errors.New("uknowo action"))
+	switch requestPayload.Action {
+	case "auth":
+		app.authenticate(w, requestPayload.Auth)
+	default:
+		app.errorJson(w, errors.New("uknowo action"))
 
 	}
 }
 
-
-func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload){
+func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload) {
 	// creae some json send to auth microsercvie
-	jsonData, _:= json.MarshalIndent(a,"","\t")
+	jsonData, _ := json.MarshalIndent(a, "", "\t")
 
 	// call the service - move to env variable later
-	request, err := http.NewRequest("POST","http://authentication-service/authenticate",bytes.NewBuffer(jsonData))
+	request, err := http.NewRequest("POST", "http://authentication-service/authenticate", bytes.NewBuffer(jsonData))
 	if err != nil {
-		app.errorJson(w,err)
+		app.errorJson(w, err)
 		return
 	}
 
 	client := &http.Client{}
 	response, err := client.Do(request)
-		if err != nil {
-		app.errorJson(w,err)
+	if err != nil {
+		app.errorJson(w, err)
 		return
 	}
-	
+
 	defer response.Body.Close()
-	if response.StatusCode == http.StatusUnauthorized{
+	if response.StatusCode == http.StatusUnauthorized {
 		app.errorJson(w, errors.New("invalid credentials"))
 		return
-	} else if response.StatusCode != http.StatusAccepted{
+	} else if response.StatusCode != http.StatusAccepted {
 		app.errorJson(w, errors.New("error calling auth service"))
 		return
 	}
 
 	var jsonFromService jsonResponse
 	err = json.NewDecoder(response.Body).Decode(&jsonFromService)
-	if err != nil {	
-		app.errorJson(w,err)
+	if err != nil {
+		app.errorJson(w, err)
 		return
 	}
-	if jsonFromService.Error{
+	if jsonFromService.Error {
 		app.errorJson(w, errors.New(jsonFromService.Message))
 		return
-	} 
+	}
 
 	//make sure we get back correct status code
 	var payload jsonResponse
@@ -91,7 +88,6 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload){
 	payload.Message = "Authenticated!"
 	payload.Data = jsonFromService.Data
 
-	app.writeJSON(w,http.StatusAccepted, payload)
-
+	app.writeJSON(w, http.StatusAccepted, payload)
 
 }

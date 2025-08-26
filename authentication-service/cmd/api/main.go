@@ -26,7 +26,7 @@ func main() {
 	log.Println("Starting Auth service...")
 	// connect to db
 	conn := connectToDB()
-	if conn != nil {
+	if conn == nil {
 		log.Panic("Can't connect to DB")
 	}
 	// set up config
@@ -45,11 +45,11 @@ func main() {
 }
 
 func openDB(dsn string) (*sql.DB, error) {
-	db, err := sql.Open("pqx", dsn)
+	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	err = db.Ping()
 	if err != nil {
 		return nil, err
