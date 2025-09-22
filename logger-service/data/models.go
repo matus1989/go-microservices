@@ -85,7 +85,6 @@
 			defer cancel()
 
 			collection := client.Database("logs").Collection("logs")
-
 			docId, err := primitive.ObjectIDFromHex(id)
 			if err != nil {
 				return nil,err
