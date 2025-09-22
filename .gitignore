@@ -31,3 +31,4 @@ project/db-data/postgres/*
 project/db-data/mongo/*
 .idea/
 go-micro.iml
+logger-service/loggerServiceApp
