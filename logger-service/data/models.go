@@ -9,7 +9,6 @@
 			"go.mongodb.org/mongo-driver/bson/primitive"
 			"go.mongodb.org/mongo-driver/mongo"
 			"go.mongodb.org/mongo-driver/mongo/options"
-			"golang.org/x/tools/go/analysis/passes/ctrlflow"
 		)
 
 		var client *mongo.Client
@@ -91,7 +90,7 @@
 			}
 
 			var entry LogEntry
-			err = collection.FindOne(ctx, bson.M("_id": docID)).Decode(&entry)
+			err = collection.FindOne(ctx, bson.M{"_id": docId}).Decode(&entry)
 			if err != nil{
 				return nil,err
 			}
@@ -105,7 +104,7 @@
 
 			collection := client.Database("logs").Collection("logs")
 
-			if err:= collection.Drop(ctx); erre !=nil {
+			if err:= collection.Drop(ctx); err !=nil {
 				return err
 			}
 			return nil
@@ -124,11 +123,11 @@
 
 			resoult,err := collection.UpdateOne(ctx, bson.M{"_id":docId},
 				bson.D{
-					{Key: "$set", bson.D{
-							{"name",l.Name},
-							{"data",l.Data},
-							{"update_at", time.Now()},
-						}},
+					{Key: "$set", Value: bson.D{
+						{Key: "name", Value: l.Name},
+						{Key: "data", Value: l.Data},
+						{Key: "update_at", Value: time.Now()},
+					}},
 				},
 			)
 			if err !=nil {
