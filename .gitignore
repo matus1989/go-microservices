@@ -33,3 +33,4 @@ project/db-data/mongo/*
 go-micro.iml
 logger-service/loggerServiceApp
 mail-service/mailerServiceApp
+mail-service/cmd/api/mailer.go

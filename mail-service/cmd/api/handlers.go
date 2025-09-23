@@ -7,7 +7,7 @@ func (app *Config) SendMail(w http.ResponseWriter, r *http.Request) {
 		From    string `json:"from"`
 		To      string `json:"to"`
 		Subject string `json:"subject"`
-		Message string `json:"mesage"`
+		Message string `json:"message"`
 	}
 
 	var requestPayload mailMessage
@@ -19,10 +19,8 @@ func (app *Config) SendMail(w http.ResponseWriter, r *http.Request) {
 
 	msg := Message{
 		From: requestPayload.From,
-
 		To:      requestPayload.To,
 		Subject: requestPayload.Subject,
-
 		Data: requestPayload.Message,
 	}
 
