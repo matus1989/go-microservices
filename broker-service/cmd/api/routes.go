@@ -1,10 +1,11 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"net/http"
 )
 
 func (app *Config) routes() http.Handler {
@@ -21,8 +22,9 @@ func (app *Config) routes() http.Handler {
 	}))
 	mux.Use(middleware.Heartbeat("/ping"))
 	mux.Post("/", app.Broker)
-	
+
 	mux.Post("/handle", app.HandleSubmission)
+	mux.Post("/log-grpc", app.logViaGRPC)
 
 	return mux
 }
