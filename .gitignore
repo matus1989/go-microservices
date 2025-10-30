@@ -32,9 +32,6 @@ project/db-data/mongo/*
 .idea/
 go-micro.iml
 logger-service/loggerServiceApp
-mail-service/mailerServiceApp
-mail-service/cmd/api/mailer.go
 project/db-data/rabbitmq/*
 listener-service/listenerApp
-mail-service/mailerApp
 mail-service/mailerApp
