@@ -39,9 +39,9 @@ build_logger:
 	@echo "Done!"
 
 ## build_listener: builds the listener binary as a windows executable
-build_logger:
+build_listener:
 	@echo "Building listener binary..."
-	chdir ..\..\listener-service && set GOOS=linux&& set GOARCH=amd64&& set CGO_ENABLED=0 && go build -o ${LISTENER_BINARY} ./cmd/api
+	chdir ..\..\listener-service && set GOOS=linux&& set GOARCH=amd64&& set CGO_ENABLED=0 && go build -o ${LISTENER_BINARY} .
 	@echo "Done!"
 
 ## build_mailer: builds the mailer binary as a windows executable
