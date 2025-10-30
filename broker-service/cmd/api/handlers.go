@@ -243,33 +243,78 @@ func (app *Config) logItemViaRPC(w http.ResponseWriter, l LogPayload) {
 	app.writeJSON(w, http.StatusAccepted, payload)
 }
 
-func (app *Config) logViaGRPC(w http.ResponseWriter, r *http.Request) {
+// func (app *Config) logViaGRPC(w http.ResponseWriter, r *http.Request) {
 
+// 	var requestPayload RequestPayload
+// 	err := app.readJSON(w, r, &requestPayload)
+// 	if err != nil {
+// 		app.errorJson(w, err)
+// 		return
+
+// 	}
+
+// 	conn, err := grpc.Dial("logger-service:50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+// 	if err != nil {
+// 		app.errorJson(w, err)
+// 		return
+// 	}
+// 	defer conn.Close()
+// 	c := logs.NewLogServiceClient(conn)
+// 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+// 	defer cancel()
+
+// 	_, err = c.WrtieLog(ctx, &logs.LogRequest{
+// 		LogEntry: &logs.Log{
+// 			Name: requestPayload.Log.Name,
+// 			Data: requestPayload.Log.Data,
+// 		},
+// 	})
+
+// 	if err != nil {
+// 		app.errorJson(w, err)
+// 		return
+// 	}
+
+// 	var payload jsonResponse
+// 	payload.Error = false
+// 	payload.Message = "logged"
+// 	app.writeJSON(w, http.StatusAccepted, payload)
+// }
+
+func (app *Config) LogViaGRPC(w http.ResponseWriter, r *http.Request) {
 	var requestPayload RequestPayload
+
 	err := app.readJSON(w, r, &requestPayload)
 	if err != nil {
 		app.errorJson(w, err)
 		return
-
 	}
 
-	conn, err := grpc.Dial("logger-serviceL50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
+	conn, err := grpc.Dial("logger-service:50001", grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
 		app.errorJson(w, err)
 		return
 	}
 	defer conn.Close()
+
 	c := logs.NewLogServiceClient(conn)
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
+
 	_, err = c.WrtieLog(ctx, &logs.LogRequest{
 		LogEntry: &logs.Log{
 			Name: requestPayload.Log.Name,
 			Data: requestPayload.Log.Data,
 		},
 	})
+	if err != nil {
+		app.errorJson(w, err)
+		return
+	}
+
 	var payload jsonResponse
 	payload.Error = false
 	payload.Message = "logged"
+
 	app.writeJSON(w, http.StatusAccepted, payload)
 }

@@ -37,3 +37,4 @@ mail-service/cmd/api/mailer.go
 project/db-data/rabbitmq/*
 listener-service/listenerApp
 mail-service/mailerApp
+mail-service/mailerApp
