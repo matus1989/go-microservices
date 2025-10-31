@@ -35,3 +35,4 @@ logger-service/loggerServiceApp
 project/db-data/rabbitmq/*
 listener-service/listenerApp
 mail-service/mailerApp
+front-end/frontApp
